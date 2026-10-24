@@ -1,0 +1,6 @@
+company,domain,country,industry,size,person,title,email,email_status,source_url,source_date,reason
+Example Bites,example.com,AE,restaurant,35,Sara Ali,Owner,sara@example.com,valid,https://example.com,2026-09-01,Opened a second branch in Dubai
+Example Clinic,example.org,SA,clinic,60,Omar Hassan,General Manager,omar@example.org,valid,https://example.org,2026-09-02,Hiring a front desk team
+Example Gov,example.net,AE,government,500,Khaled N,Director,khaled@example.net,valid,https://example.net,2026-09-02,Public entity
+Broken Co,this-domain-does-not-exist-12345.com,QA,retail,20,Lina M,Marketing Manager,lina@this-domain-does-not-exist-12345.com,invalid,https://this-domain-does-not-exist-12345.com,2026-09-03,Test of an unreachable site
+Example Bites,example.com,AE,restaurant,35,Sara Ali,Owner,sara@example.com,valid,https://example.com,2026-09-01,Duplicate row

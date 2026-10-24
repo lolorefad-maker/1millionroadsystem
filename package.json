@@ -1,0 +1,25 @@
+{
+  "name": "gulf-leads",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Gulf B2B lead pipeline: import, website check, score, draft. Finds companies, checks sites, sends a safe sequence, handles replies, hands qualified leads to you.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "leads": "node --env-file-if-exists=.env --disable-warning=ExperimentalWarning src/cli.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.2.0",
+    "imapflow": "^2.9.1",
+    "mailparser": "^3.12.4",
+    "nodemailer": "^10.2.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/mailparser": "^3.9.0",
+    "@types/nodemailer": "^8.0.2"
+  }
+}

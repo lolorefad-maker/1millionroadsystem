@@ -1,0 +1,109 @@
+{
+  "name": "gulf-leads: تنبيهات وتكاملات",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "gulf-leads ← n8n\n\n1) في n8n: Credentials ← Header Auth. الاسم: x-gulf-secret، والقيمة نفس WEBHOOK_SECRET في ملف .env (12 حرفاً أو أكثر).\n2) افتح عقدة الـ Webhook واختر هذا الـ Credential.\n3) افتح عقدة Telegram: اختر Credential لبوتك وضع رقم المحادثة مكان YOUR_CHAT_ID.\n4) فعّل الـ workflow (Active) وانسخ رابط Production من عقدة الـ Webhook.\n5) في .env: WEBHOOK_URL=ذلك الرابط ثم شغّل: npm run leads -- webhook-test\n\nلا تستعمل رابط Test إلا للتجربة (ما يعمل إلا والمحرر مفتوح).\nغيّر عقدة Telegram بأي شيء تريده: Slack أو بريد أو Google Sheets أو HubSpot.",
+        "height": 330,
+        "width": 520
+      },
+      "id": "7f0a1c52-0b5f-4a53-9b1e-0d7d5f4e0001",
+      "name": "تعليمات",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gulf-leads",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "id": "7f0a1c52-0b5f-4a53-9b1e-0d7d5f4e0002",
+      "name": "أحداث gulf-leads",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        60
+      ],
+      "webhookId": "5b7e6c64-8d3f-4a0e-9a7c-6f1d2b3c4e55",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Gulf Leads secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Turns an event from gulf-leads into a short Telegram message (plain text, so nothing from the web can inject formatting).\nconst e = $input.first().json.body || {};\nconst d = e.data || {};\nconst link = e.dashboard ? '\\n' + e.dashboard : '';\nconst dash = (v) => (v ? v : '-');\nconst lines = {\n  'lead.qualified': () => `🔥 عميل مؤهل: ${d.company}\\n${d.summary}\\nالاحتياج: ${dash(d.need)}\\nالتوقيت: ${dash(d.timeline)}\\nالتواصل: ${dash(d.person)} ${dash(d.email)} ${d.phone || ''}\\nالخطوة: ${dash(d.nextStep)}${link}`,\n  'lead.needs_human': () => `🙋 محادثة بحاجة لك (${d.reason}): ${d.company}\\n${d.summary}${link}`,\n  'proposal.ready': () => `📝 عرض مخصص جاهز لـ ${d.company}، ينتظر موافقتك${link}`,\n  'reply.pending': () => `✉️ رد من المساعد ينتظر موافقتك: ${d.company}${link}`,\n  'sending.paused': () => `⛔ الإرسال توقف تلقائياً: ${d.reason}${link}`,\n  'lead.unsubscribed': () => `🚫 ${d.company} طلب التوقف (${d.reason}). تم حظره.`,\n  'lead.bounced': () => `⚠️ إيميل مرتد: ${d.company}. تم إيقافه.`,\n  'discovery.done': () => `🔎 البحث التلقائي: أُضيفت ${d.added} شركة\\n` + (d.targets || []).map((t) => `• ${t.label}: +${t.added}${t.error ? ' (' + t.error + ')' : ''}`).join('\\n') + link,\n  'daily.summary': () => `📊 ملخص اليوم ${d.date}\\nمرسلة ${d.sent} · ردود ${d.replies} · مؤهلون ${d.qualified}\\nبانتظار موافقتك ${d.waitingApproval} · جاهزون لك ${d.openHandoffs}${link}`,\n  'test': () => '✅ اختبار الاتصال بين gulf-leads و n8n نجح',\n};\nconst make = lines[e.type];\nif (!make) return [];\nreturn [{ json: { text: make(), type: e.type } }];"
+      },
+      "id": "7f0a1c52-0b5f-4a53-9b1e-0d7d5f4e0003",
+      "name": "اكتب الرسالة",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_CHAT_ID",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "7f0a1c52-0b5f-4a53-9b1e-0d7d5f4e0004",
+      "name": "أرسل إلى Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        60
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "أحداث gulf-leads": {
+      "main": [
+        [
+          {
+            "node": "اكتب الرسالة",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "اكتب الرسالة": {
+      "main": [
+        [
+          {
+            "node": "أرسل إلى Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}
