@@ -35,7 +35,7 @@ function fakeWeb(): typeof fetch {
 }
 
 function setup(): { db: DatabaseSync; cfg: Config; mailer: MemoryMailer; leadId: number } {
-  const cfg = loadConfig("webdev");
+  const cfg = loadConfig("webdev", { allowExample: true });
   cfg.outreach.mode = "auto";
   cfg.outreach.notifyEmail = "owner@studio.test";
   const db = openDb(":memory:");

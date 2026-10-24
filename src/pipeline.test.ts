@@ -10,7 +10,7 @@ import { composeDraft, draftAll } from "./draft.ts";
 import { importCsv } from "./import.ts";
 import { loadConfig } from "./config.ts";
 
-const cfg = loadConfig("webdev");
+const cfg = loadConfig("webdev", { allowExample: true });
 
 test("csv handles quotes and CRLF", () => {
   const rows = parseCsv('a,b\r\n"x, y","say ""hi"""\r\n');

@@ -2,3 +2,8 @@ data/
 out/
 .env
 node_modules/
+
+# Your real settings (name, email, address, targets) stay on your machine.
+# Copy profiles/webdev.example.json to profiles/webdev.json and fill it in.
+profiles/*.json
+!profiles/*.example.json

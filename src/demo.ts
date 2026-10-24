@@ -2,7 +2,7 @@ import { copyFileSync, existsSync, rmSync } from "node:fs";
 import { openDb } from "./db.ts";
 
 /** Fills a separate "demo" profile with made-up companies so the dashboard can be shown without real data. */
-if (!existsSync("profiles/demo.json")) copyFileSync("profiles/webdev.json", "profiles/demo.json");
+if (!existsSync("profiles/demo.json")) copyFileSync("profiles/webdev.example.json", "profiles/demo.json");
 rmSync("data/demo.db", { force: true });
 const db = openDb("data/demo.db");
 const now = new Date().toISOString();

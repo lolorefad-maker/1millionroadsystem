@@ -12,7 +12,7 @@ const WED_10AM_DUBAI = new Date("2026-10-21T06:00:00Z");
 const DAY = 86_400_000;
 
 function setup(mode: "review" | "auto" = "review"): { db: DatabaseSync; cfg: Config; mailer: MemoryMailer; leadId: number } {
-  const cfg = loadConfig("webdev");
+  const cfg = loadConfig("webdev", { allowExample: true });
   cfg.outreach.mode = mode;
   cfg.outreach.notifyEmail = "owner@studio.test";
   const db = openDb(":memory:");

@@ -69,7 +69,7 @@ test("provider choice follows the keys in .env", () => {
 });
 
 function setup(emails: { email: string; tier?: string; status?: string; stage?: string }[]): { db: DatabaseSync; cfg: Config; ids: number[] } {
-  const cfg = loadConfig("webdev");
+  const cfg = loadConfig("webdev", { allowExample: true });
   cfg.outreach.mode = "auto";
   const db = openDb(":memory:");
   const ids = emails.map((e, i) => {

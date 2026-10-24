@@ -4,16 +4,27 @@ Finds companies, checks their websites, scores them, confirms emails, sends a sa
 and hands you qualified leads with a tailored proposal. Nothing leaves without the checks in `src/outreach.ts`;
 first messages, AI replies and proposals wait for your approval while `outreach.mode` is `review`.
 
+## First time setup
+
+```
+npm install
+cp .env.example .env                                  # keys: mailbox, Claude, Google Places, ZeroBounce/Hunter, webhook
+cp profiles/webdev.example.json profiles/webdev.json   # your name, email, address, offer, search targets
+```
+
+`.env` and `profiles/*.json` are git-ignored on purpose: they hold your real email, address and keys, and this repository is public.
+Only `profiles/*.example.json` is tracked. Edit your own copy, never the example.
+Without `profiles/<name>.json` every command stops and tells you to create it (tests and the demo use the example).
+
 ## Run
 
 ```
-npm test                                            # 40+ tests, no network needed
-npm run leads -- run --country AE --city Dubai --industry clinic   # one search by hand
-npm run leads -- dashboard                          # web dashboard on localhost:4300
+npm test                                            # 50+ tests, no network and no keys needed
+node src/demo.ts                                    # fills a separate "demo" profile with made-up companies
+npm run leads -- dashboard --profile demo           # web dashboard on localhost:4300 (prints a sign-in link)
+npm run leads -- run --country AE --city Dubai --industry clinic   # one real search by hand
 npm run leads -- loop                               # send, read replies, daily search, alerts: every 10 minutes
 ```
-
-Copy `.env.example` to `.env` and fill in what you use. Settings per client live in `profiles/<name>.json`.
 
 ## Automation
 

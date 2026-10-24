@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 /**
  * One profile per client of the system: what the client sells, who they want to reach,
@@ -101,6 +101,17 @@ export function dbPathFor(profile: string): string {
   return `data/${profile}.db`;
 }
 
-export function loadConfig(profile: string): Config {
-  return JSON.parse(readFileSync(profilePath(profile), "utf8")) as Config;
+export interface LoadOptions {
+  /** Fall back to profiles/<name>.example.json when your own file does not exist. For tests and demos only. */
+  allowExample?: boolean;
+}
+
+export function loadConfig(profile: string, o: LoadOptions = {}): Config {
+  const path = profilePath(profile);
+  if (existsSync(path)) return JSON.parse(readFileSync(path, "utf8")) as Config;
+  const example = path.replace(/\.json$/, ".example.json");
+  if (o.allowExample && existsSync(example)) return JSON.parse(readFileSync(example, "utf8")) as Config;
+  throw new Error(
+    `${path} not found. Copy ${example} to ${path}, then put your own name, email, address and targets in it.`,
+  );
 }

@@ -21,7 +21,7 @@ const SECRET = "a-long-enough-secret";
 const ENV = { WEBHOOK_URL: "http://127.0.0.1:9/hook", WEBHOOK_SECRET: SECRET };
 
 function setup(mode: "review" | "auto" = "auto"): { db: DatabaseSync; cfg: Config; mailer: MemoryMailer; leadId: number } {
-  const cfg = loadConfig("webdev");
+  const cfg = loadConfig("webdev", { allowExample: true });
   cfg.outreach.mode = mode;
   cfg.outreach.notifyEmail = "owner@studio.test";
   const db = openDb(":memory:");
